@@ -357,7 +357,7 @@ function gerar(){
   api('POST','vendas',{intentId:intent,descricao:$('cd').value,valorCentavos:cents,cliente:{id:cliId,nome:$('cn').value,telefone:$('ct').value,endereco:$('ce').value}}).then(function(r){
     if(r.code===200||r.code===201)mostra(r.j);
     else if(r.code===409&&r.j.ativa){$('gerr').textContent=r.j.erro;mostra(r.j.ativa)}
-    else{$('gerr').textContent=r.j.erro||'Não foi possível gerar o Pix. Tente de novo.';renderValor()}
+    else{if(r.j.recusada)intent=null;$('gerr').textContent=r.j.erro||'Não foi possível gerar o Pix. Tente de novo.';renderValor()}
   }).catch(function(){$('gerr').textContent='Sem conexão. Tente de novo.';renderValor()})}
 
 /* nome → sugestões (só com permissão de clientes) */
