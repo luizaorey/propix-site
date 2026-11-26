@@ -86,7 +86,8 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
 .tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
 .tot .card b{display:block;font-size:30px;letter-spacing:-.02em;margin:4px 0}
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
-@media(max-width:860px){.split{grid-template-columns:1fr}}
+.split.cli{grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)}#ficha{position:sticky;top:16px}
+@media(max-width:860px){.split,.split.cli{grid-template-columns:1fr}#ficha{position:static}}
 .lista .item{padding:12px 14px;border:1px solid var(--bd);border-radius:12px;margin-top:8px;cursor:pointer;background:#fff}
 .lista .item:hover,.lista .item.on{border-color:var(--g2);background:var(--gbg)}
 .lista .item small{display:block;color:var(--mut)}
@@ -223,14 +224,14 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
     <!-- CLIENTES -->
     <section id="t-clientes" class="hide">
       <h1 class="t">Clientes</h1>
-      <div class="split" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+      <div class="split cli">
         <div class="card">
           <label for="qc" style="margin-top:0">Buscar por nome ou telefone</label>
           <input id="qc" autocomplete="off" placeholder="Digite o nome ou o telefone">
           <div class="mut" id="lcv" style="margin:10px 0 4px"></div>
           <div class="agenda" id="lc"></div>
         </div>
-        <div class="card" id="ficha" style="position:sticky;top:16px"><div class="mut">Escolha uma cliente da lista para abrir a ficha.</div></div>
+        <div class="card" id="ficha"><div class="mut">Escolha uma cliente da lista para abrir a ficha.</div></div>
       </div>
     </section>
 
@@ -400,10 +401,16 @@ function clientes(auto){
     var atual=null;
     r.j.forEach(function(c){var ini=inicial(c.nome);if(ini!==atual){atual=ini;L.appendChild(el('div',{class:'letra',text:ini}))}
       var row=el('div',{class:'linha'+(selCli===c.id?' on':'')},[el('b',{text:c.nome||'(sem nome)'}),el('span',{text:c.telefone||'sem telefone'}),el('span',{class:'e',text:c.endereco||'sem endereço'})]);
-      row.onclick=function(){selCli=c.id;document.querySelectorAll('.agenda .linha').forEach(function(x){x.classList.remove('on')});row.classList.add('on');ficha(c.id)};L.appendChild(row)});
+      row.onclick=function(){selCli=c.id;document.querySelectorAll('.agenda .linha').forEach(function(x){x.classList.remove('on')});row.classList.add('on');ficha(c.id,true)};L.appendChild(row)});
     if(auto&&n===1){selCli=r.j[0].id;L.querySelector('.linha').classList.add('on');ficha(r.j[0].id)}})}   // sobrou uma só: já abre a ficha
 $('qc').addEventListener('input',function(){clearTimeout(tq);tq=setTimeout(function(){clientes(true)},200)});
-function ficha(id){api('GET','clientes/'+id).then(function(r){var F=$('ficha');F.innerHTML='';if(r.code!==200)return;var c=r.j;
+/* cliente que volta: leva os dados prontos para o Caixa; falta só o valor e o produto */
+function vendaPara(c){
+  if(cur&&emVenda&&(cur.status==='created'||cur.status==='novo')){aba('caixa');$('st-err').textContent='Há uma cobrança em andamento. Conclua ou cancele antes de começar a venda de '+(c.nome||'outra cliente')+'.';return}
+  novaVenda();cliId=c.id;$('cn').value=c.nome||'';$('ct').value=c.telefone||'';$('ce').value=c.endereco||'';$('cinfo').textContent='Cliente já cadastrada. Digite o valor e o produto.';aba('caixa');$('cv').focus()}
+function ficha(id,mostrar){api('GET','clientes/'+id).then(function(r){var F=$('ficha');F.innerHTML='';if(r.code!==200)return;var c=r.j;
+  if(mostrar&&window.innerWidth<=860)setTimeout(function(){F.scrollIntoView({behavior:'smooth',block:'start'})},50);   // no celular a ficha fica abaixo da lista
+  var nv=el('button',{class:'primary',text:'Nova venda para este cadastro',style:'font-size:18px;margin:0 0 16px'});nv.onclick=function(){vendaPara(c)};F.appendChild(nv);
   var dl=el('dl',{class:'ficha',style:'margin:0'});
   dl.appendChild(el('dt',{text:'Nome'}));dl.appendChild(el('dd',{text:c.nome||'(sem nome)'}));
   dl.appendChild(el('dt',{text:'WhatsApp'}));var dd=el('dd',{text:c.telefone||'—'});dl.appendChild(dd);
