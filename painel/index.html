@@ -408,17 +408,17 @@ function mostra(v){
   clearInterval(poll);if(ativa)poll=setInterval(function(){api('GET','vendas/'+v.id).then(function(r){if(r.code!==200||!cur||r.j.id!==cur.id)return;
     if(r.j.status!==cur.status){var pagou=r.j.status==='paid';mostra(r.j);if(pagou)beep()}
     else if(chavePix(r.j)!==chavePix(cur)){var novo=visiveis(r.j).length>visiveis(cur).length;cur=r.j;pintaPix(r.j);if(novo)beep()}})},v.direto?3000:2000)}
-/* Pix direto na chave: mostra quem pagou e a atendente confirma (nunca marca sozinho) */
+/* Pix direto na chave: mostra o que entrou e a atendente confirma pelo comprovante (nunca marca sozinho) */
 var recusados={};
 function visiveis(v){return (v.candidatos||[]).filter(function(c){return !recusados[v.id+c.id]})}
 function chavePix(v){return visiveis(v).map(function(c){return c.id}).join()+(v.semConsulta?'!':'')}
 function pintaPix(v){var B=$('st-pix');B.innerHTML='';if(!v.direto||v.status!=='created')return;var l=visiveis(v);
   if(v.semConsulta){B.appendChild(el('div',{class:'aviso',text:'Não foi possível consultar a conta agora. Tentando de novo.'}));return}
-  if(!l.length){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, o nome de quem pagou aparece aqui para você confirmar.'}));return}
+  if(!l.length){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, ele aparece aqui para você confirmar.'}));return}
   l.forEach(function(c){var sim=el('button',{class:'primary',text:'Sim, é desta venda',style:'font-size:19px;margin:10px 0 6px'}),nao=el('button',{class:'btn',text:'Não é desta venda'});
     sim.onclick=function(){sim.disabled=true;api('POST','vendas/'+v.id+'/confirmar',{pagamentoId:c.id}).then(function(r){if(r.code===200){mostra(r.j);beep()}else{sim.disabled=false;$('st-err').textContent=r.j.erro||'Não foi possível confirmar.'}})};
     nao.onclick=function(){recusados[v.id+c.id]=1;pintaPix(v)};
-    B.appendChild(el('div',{class:'pixrec'},[el('div',{text:'Pix de '+brl(v.valorCentavos)+' recebido de'}),el('b',{text:c.nome}),el('div',{class:'mut',text:'às '+hora(c.em,true)}),sim,nao]))})}
+    B.appendChild(el('div',{class:'pixrec'},[el('div',{text:'Entrou um Pix de '+brl(v.valorCentavos)}),el('b',{text:'às '+hora(c.em,true)+' · '+c.banco}),c.fim?el('div',{text:'ID da transação termina em '+c.fim}):'',el('div',{class:'mut',text:'Confira o comprovante da cliente antes de confirmar.'}),sim,nao]))})}
 $('b-ver').onclick=function(){$('st-err').textContent='';api('GET','vendas/'+cur.id+'?verificar=1').then(function(r){if(r.code===200){var pagou=r.j.status==='paid'&&cur.status!=='paid';mostra(r.j);if(pagou)beep();else if(r.j.status==='created')$('st-err').textContent='Ainda não recebemos o pagamento.'}else $('st-err').textContent='Não foi possível verificar agora.'})};
 $('b-can').onclick=function(){if(!confirm(cur.candidatos&&cur.candidatos.length?'ATENÇÃO: entrou um Pix deste valor. Cancelar mesmo assim?':'Cancelar esta cobrança?'))return;api('POST','vendas/'+cur.id+'/cancelar').then(function(r){if(r.code===200){mostra(r.j);if(r.j.status==='paid')$('st-err').textContent='A cliente já tinha pago: a venda foi mantida como paga.'}else if(r.code===409){$('st-err').textContent=r.j.erro;if(r.j.venda)mostra(r.j.venda)}else $('st-err').textContent='Não foi possível cancelar.'})};
 $('b-nova').onclick=novaVenda;
