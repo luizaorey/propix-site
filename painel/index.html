@@ -73,7 +73,7 @@ h1.t{font-size:32px;letter-spacing:-.02em;margin-bottom:18px}
 .vazio b{display:block;color:var(--ink);font-size:20px;margin-bottom:6px}
 .aviso{background:var(--vmb);color:var(--vm);padding:10px 14px;border-radius:10px;margin-top:12px;font-size:14px;text-align:left}
 .sug{position:absolute;z-index:5;left:0;right:0;background:#fff;border:1px solid var(--bd);border-radius:10px;box-shadow:var(--sh);margin-top:4px;overflow:hidden}
-.sug div{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bd)}.sug div:last-child{border:0}.sug div:hover{background:var(--gbg)}
+.sug div{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bd)}.sug div:last-child{border:0}.sug div:hover,.sug div.on{background:var(--gbg)}.sug div b{display:block}.sug div small{display:block;color:var(--mut)}.sug p{margin:0;padding:10px 14px;color:var(--mut);font-size:14px}.sug{max-height:320px;overflow-y:auto}
 .rel{position:relative}
 
 /* tabelas e listas */
@@ -346,11 +346,15 @@ $('cv').addEventListener('input',function(e){   // estilo calculadora: os dígit
 $('cv').addEventListener('focus',function(){var x=this;setTimeout(function(){x.setSelectionRange(x.value.length,x.value.length)},0)});
 $('cv').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('cd').focus()}});
 $('cd').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();gerar()}});
+$('cn').addEventListener('keydown',function(e){if(!sugL.length){if(e.key==='Escape')fechaSug();return}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sugI=(sugI+(e.key==='ArrowDown'?1:(sugI<0?0:-1))+sugL.length)%sugL.length;marca()}
+  else if(e.key==='Enter'&&sugI>=0){e.preventDefault();e.stopImmediatePropagation();escolhe(sugL[sugI])}
+  else if(e.key==='Escape')fechaSug()});
 ['cn','ct','ce'].forEach(function(id,i){$(id).addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(i<2)$(['ct','ce'][i]).focus();else gerar()}})});
 document.addEventListener('keydown',function(e){if(e.key==='F2'&&!$('t-caixa').classList.contains('hide')&&!emVenda){e.preventDefault();$('cv').focus()}});
 $('gerar').onclick=gerar;
 function travar(on){['cv','cd','cn','ct','ce'].forEach(function(i){$(i).disabled=on});sh('hint',!on)}
-function novaVenda(){clearInterval(poll);cur=null;emVenda=false;intent=null;cents=0;cliId=null;travar(false);renderValor();
+function novaVenda(){agendaC=null;clearInterval(poll);cur=null;emVenda=false;intent=null;cents=0;cliId=null;travar(false);renderValor();
   ['cn','ct','ce','cd'].forEach(function(i){$(i).value=''});$('cinfo').textContent='';$('gerr').textContent='';sh('st',false);sh('vazio',true);$('cv').focus()}
 function gerar(){
   if(cents<=0||$('gerar').disabled)return;$('gerar').disabled=true;$('gerr').textContent='';
@@ -361,11 +365,24 @@ function gerar(){
     else{if(r.j.recusada)intent=null;$('gerr').textContent=r.j.erro||'Não foi possível gerar o Pix. Tente de novo.';renderValor()}
   }).catch(function(){$('gerr').textContent='Sem conexão. Tente de novo.';renderValor()})}
 
-/* nome → sugestões (só com permissão de clientes) */
-var st;$('cn').addEventListener('input',function(){cliId=null;$('cinfo').textContent='';clearTimeout(st);var q=this.value.trim();if(!eu.perm.clientes||q.length<2){sh('sug',false);return}
-  st=setTimeout(function(){api('GET','clientes?q='+encodeURIComponent(q)).then(function(r){var s=$('sug');s.innerHTML='';if(r.code!==200||!r.j.length){sh('sug',false);return}
-    r.j.slice(0,6).forEach(function(c){var d=el('div',{text:(c.nome||'(sem nome)')+(c.telefone?' · '+c.telefone:'')});d.onclick=function(){cliId=c.id;$('cn').value=c.nome||'';$('ct').value=c.telefone||'';$('ce').value=c.endereco||'';$('cinfo').textContent='Cliente já cadastrada. Os dados serão reaproveitados.';sh('sug',false);$('cd').focus()};s.appendChild(d)});sh('sug',true)})},250)});
-document.addEventListener('click',function(e){if(e.target.id!=='cn')sh('sug',false)});
+/* nome → sugestões desde a 1ª letra, sem ligar para acento (só com permissão de clientes) */
+var agendaC=null,carregando=false,sugL=[],sugI=-1;
+function semAcento(t){return String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim()}
+function carregaAgenda(){if(carregando||!eu.perm.clientes)return;carregando=true;api('GET','clientes').then(function(r){carregando=false;agendaC=r.code===200?r.j:null;sugere()})}
+function escolhe(c){cliId=c.id;$('cn').value=c.nome||'';$('ct').value=c.telefone||'';$('ce').value=c.endereco||'';$('cinfo').textContent='Cliente já cadastrada. '+(cents>0?'Os dados serão reaproveitados.':'Digite o valor e o produto.');fechaSug();(cents>0?$('cd'):$('cv')).focus()}
+function fechaSug(){sh('sug',false);sugL=[];sugI=-1}
+function marca(){Array.prototype.forEach.call($('sug').querySelectorAll('[data-i]'),function(d){d.classList.toggle('on',Number(d.dataset.i)===sugI)})}
+function sugere(){
+  if(document.activeElement!==$('cn')||cliId)return;var q=semAcento($('cn').value);if(!eu.perm.clientes||!q||!agendaC){fechaSug();return}
+  var ini=[],meio=[];agendaC.forEach(function(c){var n=semAcento(c.nome);if(!n)return;if(n.indexOf(q)===0)ini.push(c);else if((' '+n).indexOf(' '+q)>=0)meio.push(c)});
+  var todos=ini.concat(meio),s=$('sug');s.innerHTML='';sugL=todos.slice(0,8);sugI=-1;
+  if(!todos.length){s.appendChild(el('p',{text:'Nenhum cadastro com esse nome. Será criado nesta venda.'}));sh('sug',true);return}
+  sugL.forEach(function(c,i){var d=el('div',{'data-i':i},[el('b',{text:c.nome}),el('small',{text:[c.telefone,c.endereco].filter(Boolean).join(' · ')||'sem telefone'})]);
+    d.onmousedown=function(e){e.preventDefault();escolhe(c)};s.appendChild(d)});
+  if(todos.length>sugL.length)s.appendChild(el('p',{text:'Mais '+(todos.length-sugL.length)+'. Continue digitando.'}));sh('sug',true)}
+$('cn').addEventListener('input',function(){cliId=null;$('cinfo').textContent='';if(agendaC)sugere();else carregaAgenda()});
+$('cn').addEventListener('focus',carregaAgenda);   // relê a lista cada vez que entra no campo
+$('cn').addEventListener('blur',fechaSug);
 
 /* ---------- caixa: cartão de status ---------- */
 var ICONE={clock:'<circle cx="26" cy="26" r="21" stroke="#e08a12"/><path d="M26 14v13l8 5" stroke="#e08a12"/>',check:'<circle cx="26" cy="26" r="21" stroke="#0d8a60"/><path d="M16 27l7 7 14-15" stroke="#0d8a60"/>',x:'<circle cx="26" cy="26" r="21" stroke="#5f6b65"/><path d="M18 18l16 16M34 18L18 34" stroke="#5f6b65"/>'};
