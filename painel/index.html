@@ -414,6 +414,7 @@ function visiveis(v){return (v.candidatos||[]).filter(function(c){return !recusa
 function chavePix(v){return visiveis(v).map(function(c){return c.id}).join()+(v.semConsulta?'!':'')}
 function pintaPix(v){var B=$('st-pix');B.innerHTML='';if(!v.direto||v.status!=='created')return;var l=visiveis(v);
   if(v.semConsulta){B.appendChild(el('div',{class:'aviso',text:'Não foi possível consultar a conta agora. Tentando de novo.'}));return}
+  if(v.auto){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, a tela muda sozinha.'}));return}
   if(!l.length){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, ele aparece aqui para você confirmar.'}));return}
   l.forEach(function(c){var sim=el('button',{class:'primary',text:'Sim, é desta venda',style:'font-size:19px;margin:10px 0 6px'}),nao=el('button',{class:'btn',text:'Não é desta venda'});
     sim.onclick=function(){sim.disabled=true;api('POST','vendas/'+v.id+'/confirmar',{pagamentoId:c.id}).then(function(r){if(r.code===200){mostra(r.j);beep()}else{sim.disabled=false;$('st-err').textContent=r.j.erro||'Não foi possível confirmar.'}})};
