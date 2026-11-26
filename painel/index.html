@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://badhkhukxidtemzlgnlc.supabase.co">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProPix · Makro Boutique</title>
+<style>
+:root{
+  --ink:#14221c;--bar:#101c17;--mut:#66726c;--bd:#dfe6e1;--bg:#f3f7f3;--card:#fff;
+  --g:#0a6b4b;--g2:#0d8a60;--gl:#19c088;--gbg:#e6f5ed;
+  --am:#b4690e;--amb:#fff4e0;--vm:#b3261e;--vmb:#fdeceb;--cz:#5f6b65;--czb:#eceff0;
+  --sh:0 1px 2px rgba(16,28,23,.05),0 8px 24px rgba(16,28,23,.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  background:radial-gradient(1200px 500px at 85% -10%,#dcefe3 0,transparent 60%),var(--bg)}
+.hide{display:none!important}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit;color:inherit;width:100%;padding:12px 14px;border:1px solid var(--bd);border-radius:10px;background:#fff;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus{outline:0;border-color:var(--g2);box-shadow:0 0 0 3px rgba(13,138,96,.18)}
+input:disabled{background:#f4f6f4;color:#3b4742;opacity:1}
+label{display:block;font-size:13px;font-weight:600;color:#3b4742;margin:14px 0 6px}
+h1,h2,h3{margin:0}
+
+/* topo */
+.top{background:var(--bar);color:#fff;display:flex;align-items:center;gap:16px;padding:0 28px;height:62px}
+.logo{display:flex;align-items:baseline;gap:14px}
+.logo b{font-size:26px;letter-spacing:-.02em;color:var(--gl)}
+.logo i{font-style:normal;opacity:.35}
+.logo span{font-size:14px;letter-spacing:.14em;font-weight:600}
+.quem{margin-left:auto;display:flex;align-items:center;gap:10px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--gl);box-shadow:0 0 0 4px rgba(25,192,136,.2)}
+.sair{background:none;border:0;color:#9db0a7;font-size:14px;padding:6px 8px;border-radius:8px}
+.sair:hover{color:#fff;background:rgba(255,255,255,.08)}
+.tabs{background:rgba(255,255,255,.7);backdrop-filter:blur(6px);border-bottom:1px solid var(--bd);display:flex;gap:6px;padding:0 24px;overflow-x:auto}
+.tabs button{background:none;border:0;padding:16px 18px;font-size:17px;font-weight:600;color:#47544d;border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button:hover{color:var(--ink)}
+.tabs button.on{color:var(--ink);border-color:var(--gl)}
+main{max-width:1120px;margin:0 auto;padding:28px 24px 60px}
+h1.t{font-size:32px;letter-spacing:-.02em;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sh);padding:24px}
+.sub{background:#f5f8f5;border:1px solid var(--bd);border-radius:14px;padding:16px 18px;margin-top:20px}
+.sub h3{font-size:17px;margin-bottom:2px}.sub h3 small{font-weight:400;color:var(--mut);font-size:15px}
+.mut{color:var(--mut);font-size:14px}
+.btn{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px 16px;font-weight:600;color:var(--ink)}
+.btn:hover{border-color:#bfcbc4}
+.btn.danger{color:var(--vm);border-color:#ecc3c0}
+.primary{width:100%;border:0;border-radius:14px;background:linear-gradient(180deg,var(--g2),var(--g));color:#fff;font-size:24px;font-weight:700;padding:18px;margin-top:22px;box-shadow:0 6px 16px rgba(10,107,75,.28);transition:transform .08s,filter .15s}
+.primary:hover{filter:brightness(1.06)}.primary:active{transform:translateY(1px)}
+.primary:disabled{opacity:.45;box-shadow:none;cursor:default}
+.erro{color:var(--vm);margin-top:10px;min-height:22px;font-size:15px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* caixa */
+.caixa{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:860px){.caixa,.row2{grid-template-columns:1fr}}
+.valor{font-size:40px;font-weight:800;letter-spacing:-.02em;padding:10px 14px}
+.hint{color:var(--mut);font-size:13px;margin-top:10px;text-align:center}
+.status{text-align:center;border-radius:18px;padding:26px 22px;border:1px solid}
+.status .ic{width:52px;height:52px;margin:0 auto 6px}
+.status h2{font-size:28px;letter-spacing:-.01em}
+.status .l1{color:#3b4742;margin-top:4px}
+.status .big{font-size:48px;font-weight:800;letter-spacing:-.03em;margin:6px 0}
+.status .cli{font-size:20px;font-weight:600}
+.st-novo,.st-created{background:var(--amb);border-color:#f3d9a8}.st-novo h2,.st-created h2{color:#9a5a08}
+.st-paid{background:var(--gbg);border-color:#bfe5d0}.st-paid h2{color:var(--g)}
+.st-canceled,.st-expired,.st-refunded{background:var(--czb);border-color:#d5dadb}.st-canceled h2,.st-expired h2,.st-refunded h2{color:var(--cz)}
+.qr{width:200px;height:200px;margin:16px auto 6px;background:#fff;padding:8px;border-radius:12px}.qr svg{width:100%;height:100%;display:block}
+.acoes{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.vazio{border:2px dashed #cfdad3;background:rgba(255,255,255,.5);color:var(--mut);text-align:center;padding:36px 24px;border-radius:18px}
+.vazio b{display:block;color:var(--ink);font-size:20px;margin-bottom:6px}
+.aviso{background:var(--vmb);color:var(--vm);padding:10px 14px;border-radius:10px;margin-top:12px;font-size:14px;text-align:left}
+.sug{position:absolute;z-index:5;left:0;right:0;background:#fff;border:1px solid var(--bd);border-radius:10px;box-shadow:var(--sh);margin-top:4px;overflow:hidden}
+.sug div{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--bd)}.sug div:last-child{border:0}.sug div:hover{background:var(--gbg)}
+.rel{position:relative}
+
+/* tabelas e listas */
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);text-align:left;padding:10px 8px;border-bottom:1px solid var(--bd)}
+td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-align:middle}
+.n{text-align:right}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700}
+.p-paid{background:var(--gbg);color:var(--g)}.p-created,.p-novo{background:var(--amb);color:var(--am)}.p-canceled,.p-expired,.p-refunded{background:var(--czb);color:var(--cz)}
+.tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.tot .card b{display:block;font-size:30px;letter-spacing:-.02em;margin:4px 0}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:24px;align-items:start}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+.lista .item{padding:12px 14px;border:1px solid var(--bd);border-radius:12px;margin-top:8px;cursor:pointer;background:#fff}
+.lista .item:hover,.lista .item.on{border-color:var(--g2);background:var(--gbg)}
+.lista .item small{display:block;color:var(--mut)}
+.ficha dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-top:16px}
+.ficha dd{margin:2px 0 0;font-size:20px;font-weight:600}
+.ficha .linha{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:6px}
+
+@media(max-width:560px){
+  .top{padding:0 14px;gap:8px}.logo i,.logo span{display:none}.logo b{font-size:22px}
+  .quem{font-size:14px;white-space:nowrap;gap:8px}.tabs{padding:0 8px}.tabs button{padding:14px 12px;font-size:16px}
+  main{padding:20px 14px 50px}h1.t{font-size:26px}.valor{font-size:34px}.card{padding:18px}
+}
+/* lista telefônica */
+.agenda{max-height:62vh;overflow:auto;margin:0 -6px;padding:0 6px}
+.agenda .letra{position:sticky;top:0;background:#fff;font-weight:800;color:var(--g);font-size:15px;letter-spacing:.08em;padding:10px 4px 4px;border-bottom:2px solid var(--gbg);z-index:1}
+.agenda .linha{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2px 14px;padding:10px 10px;border-bottom:1px solid #edf1ee;cursor:pointer;border-radius:8px}
+.agenda .linha:hover{background:#f2f8f4}.agenda .linha.on{background:var(--gbg)}
+.agenda .linha b{font-size:16px;grid-row:span 2;align-self:center;overflow:hidden;text-overflow:ellipsis}
+.agenda .linha span{color:#3b4742;font-size:14px;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.agenda .linha span.e{color:var(--mut);font-size:13px}
+/* chave liga/desliga */
+.tg{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #e6ece8}
+.tg:last-child{border:0}.tg span{font-size:17px}.tg.off span{color:#9aa6a0}
+.sw{position:relative;width:54px;height:30px;flex:none}
+.sw input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.sw i{position:absolute;inset:0;background:#c3ccc7;border-radius:999px;transition:.15s;pointer-events:none}
+.sw i::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.15s}
+.sw input:checked+i{background:var(--g2)}.sw input:checked+i::after{left:27px}
+.sw input:disabled{cursor:not-allowed}.sw input:disabled+i{opacity:.45}
+.u-row{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-top:12px;background:#fff}
+.u-row .cab{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.u-row .cab b{font-size:18px}.u-row .acoes2{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.u-row.inativo{opacity:.6}
+
+/* login / setup */
+.centro{min-height:100%;display:grid;place-items:center;padding:24px}
+.box{width:100%;max-width:440px}
+.box .logo{justify-content:center;margin-bottom:22px;color:var(--ink)}
+.box .logo span{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="teste" class="hide" style="background:#b00020;color:#fff;font-weight:700;text-align:center;padding:6px 10px;font-size:14px">MODO TESTE — o Pix aqui é simulado e NÃO é dinheiro real</div>
+
+<!-- primeira configuração / login / troca de senha -->
+<div id="s-setup" class="centro hide"><div class="box card">
+  <div class="logo"><b>ProPix</b><i>|</i><span>MAKRO BOUTIQUE</span></div>
+  <h2>Primeira configuração</h2>
+  <p class="mut">Cadastre o seu acesso de gestor. Isso é feito uma única vez, e só o gestor cria funcionários, redefine senhas e altera permissões.</p>
+  <form id="f-setup" autocomplete="off">
+    <div id="su-cod" class="hide"><label for="su-c">Código de instalação</label><input id="su-c" autocomplete="off"></div>
+    <label for="su-n">Seu nome</label><input id="su-n" required>
+    <label for="su-e">Seu e-mail (será o seu login)</label><input id="su-e" type="email" required>
+    <label for="su-s">Senha (mínimo 8 caracteres)</label><input id="su-s" type="password" minlength="8" required autocomplete="new-password">
+    <label for="su-s2">Repita a senha</label><input id="su-s2" type="password" minlength="8" required autocomplete="new-password">
+    <button class="primary" style="font-size:20px">Criar acesso do gestor</button>
+    <div class="erro" id="su-err" role="alert"></div>
+  </form>
+</div></div>
+
+<div id="s-login" class="centro hide"><div class="box card">
+  <div class="logo"><b>ProPix</b><i>|</i><span>MAKRO BOUTIQUE</span></div>
+  <form id="f-login">
+    <label for="lg-l">Login</label><input id="lg-l" autocomplete="username" autocapitalize="none" required>
+    <label for="lg-s">Senha</label><input id="lg-s" type="password" autocomplete="current-password" required>
+    <button class="primary" style="font-size:20px">Entrar</button>
+    <div class="erro" id="lg-err" role="alert"></div>
+  </form>
+</div></div>
+
+<div id="s-troca" class="centro hide"><div class="box card">
+  <div class="logo"><b>ProPix</b><i>|</i><span>MAKRO BOUTIQUE</span></div>
+  <h2>Defina a sua senha</h2>
+  <p class="mut">Esta é a sua primeira entrada (ou a senha foi redefinida). Escolha uma senha só sua.</p>
+  <form id="f-troca">
+    <label for="tr-a">Senha atual (a que o gestor passou)</label><input id="tr-a" type="password" required autocomplete="current-password">
+    <label for="tr-n">Nova senha (mínimo 8 caracteres)</label><input id="tr-n" type="password" minlength="8" required autocomplete="new-password">
+    <button class="primary" style="font-size:20px">Salvar e entrar</button>
+    <div class="erro" id="tr-err" role="alert"></div>
+  </form>
+</div></div>
+
+<!-- aplicativo -->
+<div id="app" class="hide">
+  <div class="top">
+    <div class="logo"><b>ProPix</b><i>|</i><span>MAKRO BOUTIQUE</span></div>
+    <div class="quem"><span class="dot"></span><span id="quem"></span><button class="sair" id="sair">Sair</button></div>
+  </div>
+  <div class="tabs" id="tabs"></div>
+  <main>
+    <!-- CAIXA -->
+    <section id="t-caixa">
+      <h1 class="t">Nova venda</h1>
+      <div class="caixa">
+        <div class="card">
+          <div class="row2">
+            <div><label for="cv" style="margin-top:0">Valor da venda</label><input id="cv" class="valor" inputmode="numeric" autocomplete="off" value="R$ 0,00"></div>
+            <div><label for="cd" style="margin-top:0">Descrição</label><input id="cd" autocomplete="off" placeholder="Ex.: Bermuda" style="padding:16px 14px;font-size:20px"></div>
+          </div>
+          <div class="sub">
+            <h3>Dados da cliente <small>· opcional</small></h3>
+            <div class="rel">
+              <label for="cn">Nome</label><input id="cn" autocomplete="off">
+              <div id="sug" class="sug hide"></div>
+            </div>
+            <label for="ct">Telefone / WhatsApp</label><input id="ct" inputmode="tel" autocomplete="off" placeholder="(71) 9XXXX-XXXX">
+            <label for="ce">Endereço</label><input id="ce" autocomplete="off">
+            <div class="mut" id="cinfo" style="margin-top:8px"></div>
+          </div>
+          <button class="primary" id="gerar" disabled>Gerar Pix</button>
+          <div class="erro" id="gerr" role="alert"></div>
+          <div class="hint" id="hint">Enter gera o Pix · Tab leva aos dados da cliente · F2 volta ao valor</div>
+        </div>
+        <div id="lado">
+          <div class="vazio" id="vazio"><b>Após gerar o Pix</b>A cliente encosta o celular no cartão NFC e a confirmação aparece aqui, sozinha.</div>
+          <div class="status hide" id="st">
+            <svg class="ic" id="st-ic" viewBox="0 0 52 52" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></svg>
+            <h2 id="st-t"></h2>
+            <div class="l1" id="st-l1"></div>
+            <div class="big" id="st-v"></div>
+            <div class="cli" id="st-c"></div>
+            <div class="l1" id="st-l2"></div>
+            <div class="aviso hide" id="st-av"></div>
+            <div class="qr hide" id="st-qr" aria-label="QR Code do Pix"></div>
+            <div class="mut hide" id="st-qrd">Ou a cliente pode ler este QR com a câmera do banco.</div>
+            <div class="acoes" id="st-ac"><button class="btn" id="b-ver">Verificar pagamento</button><button class="btn danger" id="b-can">Cancelar</button></div>
+            <button class="primary hide" id="b-nova" style="font-size:20px">Nova venda</button>
+            <div class="erro" id="st-err" role="alert"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLIENTES -->
+    <section id="t-clientes" class="hide">
+      <h1 class="t">Clientes</h1>
+      <div class="split" style="grid-template-columns:minmax(0,1.25fr) minmax(0,1fr)">
+        <div class="card">
+          <label for="qc" style="margin-top:0">Buscar por nome ou telefone</label>
+          <input id="qc" autocomplete="off" placeholder="Digite o nome ou o telefone">
+          <div class="mut" id="lcv" style="margin:10px 0 4px"></div>
+          <div class="agenda" id="lc"></div>
+        </div>
+        <div class="card" id="ficha" style="position:sticky;top:16px"><div class="mut">Escolha uma cliente da lista para abrir a ficha.</div></div>
+      </div>
+    </section>
+
+    <!-- HISTÓRICO -->
+    <section id="t-hist" class="hide">
+      <h1 class="t">Histórico</h1>
+      <div class="card">
+        <div class="row2" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">
+          <div><label for="hd" style="margin-top:0">De</label><input id="hd" type="date"></div>
+          <div><label for="ha" style="margin-top:0">Até</label><input id="ha" type="date"></div>
+          <div><label for="hs" style="margin-top:0">Situação</label><select id="hs"><option value="">Todas</option><option value="paid">Paga</option><option value="created">Aguardando</option><option value="canceled">Cancelada</option><option value="expired">Expirada</option><option value="refunded">Estornada</option></select></div>
+          <div><label for="hq" style="margin-top:0">Nº, cliente ou produto</label><input id="hq"></div>
+        </div>
+        <div class="acoes" style="justify-content:flex-start"><button class="btn" id="hb">Buscar</button><button class="btn hide" id="hx">Exportar (CSV)</button></div>
+      </div>
+      <div class="card" style="margin-top:16px;overflow:auto"><table><thead><tr><th class="n">Nº</th><th>Quando</th><th>Cliente / compra</th><th>Situação</th><th class="n">Valor</th><th></th></tr></thead><tbody id="ht"></tbody></table><div class="mut" id="hv" style="margin-top:10px"></div></div>
+    </section>
+
+    <!-- FECHAMENTO -->
+    <section id="t-fech" class="hide">
+      <h1 class="t">Fechamento</h1>
+      <div class="card" style="margin-bottom:16px"><label for="fd" style="margin-top:0">Dia (horário da Bahia)</label><input id="fd" type="date" style="max-width:220px"></div>
+      <div class="tot" id="ftot"></div>
+      <div class="mut" id="fnota" style="margin-top:14px"></div>
+    </section>
+
+    <!-- CONFIGURAÇÕES -->
+    <section id="t-conf" class="hide">
+      <h1 class="t">Usuários e permissões</h1>
+      <div class="card">
+        <h2 style="font-size:22px">Novo funcionário</h2>
+        <form id="f-user" autocomplete="off">
+          <div class="row2">
+            <div><label for="un" >Nome</label><input id="un" required></div>
+            <div><label for="ul">Login</label><input id="ul" required autocapitalize="none" placeholder="ex.: ana"></div>
+          </div>
+          <label for="us">Senha inicial (mínimo 8 caracteres)</label><input id="us" type="text" minlength="8" required autocomplete="off">
+          <div class="sub" style="margin-top:18px"><h3>Permissões</h3><div class="mut" style="margin-bottom:6px">Por padrão, o funcionário só opera o caixa.</div><div id="perm-new"></div></div>
+          <button class="primary" style="font-size:20px">Criar acesso</button>
+          <div class="erro" id="u-err" role="alert"></div>
+        </form>
+      </div>
+      <h2 style="margin:28px 0 4px;font-size:20px">Acessos cadastrados</h2>
+      <div id="u-list"></div>
+    </section>
+  </main>
+</div>
+
+<script src="/config.js"></script>
+<script src="/static/qrcode.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function el(t,a,k){var e=document.createElement(t);for(var x in (a||{})){if(x==='class')e.className=a[x];else if(x==='text')e.textContent=a[x];else e.setAttribute(x,a[x])}(k||[]).forEach(function(c){e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
+var ROT={created:'Aguardando pagamento',novo:'Gerando…',paid:'Paga',canceled:'Cancelada',expired:'Expirada',refunded:'Estornada'};
+var eu=null,cents=0,intent=null,cur=null,poll=null,cliId=null,emVenda=false;
+function brl(c){return 'R$ '+(c/100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+/* PROPIX_API só existe no site publicado (telas num endereço, programa em outro): aí a sessão vai no cabeçalho */
+var BASE=window.PROPIX_API||'/painel/api/';
+function guarda(t){try{if(t)localStorage.setItem('propix_s',t);else localStorage.removeItem('propix_s')}catch(e){}window._s=t||null}
+function cab(h){var t=window._s;if(!t){try{t=localStorage.getItem('propix_s')}catch(e){}}if(window.PROPIX_API&&t)h.Authorization='Bearer '+t;return h}
+function api(m,p,b){return fetch(BASE+p,{method:m,headers:cab({'Content-Type':'application/json'}),body:b?JSON.stringify(b):undefined}).then(function(r){return r.json().catch(function(){return {}}).then(function(j){if(j&&j.sessao)guarda(j.sessao);return {code:r.status,j:j}})},function(){return {code:0,j:{erro:'Sem conexão. Tente de novo.'}}})}
+function uid(){var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.prototype.map.call(a,function(x){return ('0'+x.toString(16)).slice(-2)}).join('')}
+function sh(id,on){$(id).classList[on?'remove':'add']('hide')}
+function hora(iso,so){return iso?new Date(iso).toLocaleString('pt-BR',so?{timeZone:'America/Bahia',hour:'2-digit',minute:'2-digit'}:{timeZone:'America/Bahia',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}):''}
+function beep(){try{var c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=880;g.gain.value=.15;o.start();setTimeout(function(){o.stop();c.close()},350)}catch(e){}}
+function waNum(t){var d=String(t||'').replace(/\D/g,'');return (d.length===10||d.length===11)?'55'+d:d}
+
+/* ---------- telas de entrada ---------- */
+function telas(qual){['s-setup','s-login','s-troca','app'].forEach(function(i){sh(i,i===qual)})}
+function entrou(u){
+  eu=u;
+  if(u.trocarSenha){telas('s-troca');$('tr-a').focus();return}
+  telas('app');$('quem').textContent=u.nome+' · '+(u.papel==='admin'?'Gestor':'Caixa');
+  var abas=[['caixa','Caixa',true],['clientes','Clientes',u.perm.clientes],['hist','Histórico',u.perm.historico],['fech','Fechamento',u.papel==='admin'],['conf','Configurações',u.papel==='admin']];
+  var t=$('tabs');t.innerHTML='';
+  abas.filter(function(a){return a[2]}).forEach(function(a){var b=el('button',{text:a[1],'data-t':a[0]});b.onclick=function(){aba(a[0])};t.appendChild(b)});
+  sh('hx',u.perm.exportar);
+  aba('caixa');
+  api('GET','atual').then(function(r){if(r.j&&r.j.id)mostra(r.j);else novaVenda()});
+}
+function aba(n){
+  document.querySelectorAll('#tabs button').forEach(function(b){b.classList.toggle('on',b.dataset.t===n)});
+  ['caixa','clientes','hist','fech','conf'].forEach(function(x){sh('t-'+x,x===n)});
+  if(n==='caixa'){if(!emVenda)$('cv').focus()}
+  if(n==='clientes'){clientes(false);$('qc').focus()}
+  if(n==='hist'){if(!$('hd').value){$('hd').value=eu.hoje;$('ha').value=eu.hoje}hist()}
+  if(n==='fech'){if(!$('fd').value)$('fd').value=eu.hoje;fech()}
+  if(n==='conf')usuarios();
+}
+api('GET','estado').then(function(r){
+  sh('teste',!!r.j.modoTeste);sh('su-cod',!!r.j.precisaCodigo);
+  if(r.j.precisaSetup){telas('s-setup');$('su-n').focus();return}
+  api('GET','me').then(function(m){if(m.code===200)entrou(m.j);else{telas('s-login');$('lg-l').focus()}})});
+$('f-setup').onsubmit=function(e){e.preventDefault();$('su-err').textContent='';
+  if($('su-s').value!==$('su-s2').value){$('su-err').textContent='As senhas não são iguais.';return}
+  api('POST','setup',{codigo:$('su-c').value,nome:$('su-n').value,email:$('su-e').value,senha:$('su-s').value}).then(function(r){if(r.code===200){$('su-s').value=$('su-s2').value='';entrou(r.j)}else $('su-err').textContent=r.j.erro||'Não foi possível concluir.'})};
+$('f-login').onsubmit=function(e){e.preventDefault();$('lg-err').textContent='';
+  api('POST','login',{login:$('lg-l').value,senha:$('lg-s').value}).then(function(r){if(r.code===200){$('lg-s').value='';entrou(r.j)}else $('lg-err').textContent=r.j.erro||'Não foi possível entrar.'})};
+$('f-troca').onsubmit=function(e){e.preventDefault();$('tr-err').textContent='';
+  api('POST','minha-senha',{atual:$('tr-a').value,nova:$('tr-n').value}).then(function(r){if(r.code===200){$('tr-a').value=$('tr-n').value='';entrou(r.j)}else $('tr-err').textContent=r.j.erro||'Não foi possível salvar.'})};
+$('sair').onclick=function(){api('POST','logout').then(function(){guarda(null);location.reload()})};
+
+/* ---------- caixa: formulário ---------- */
+function renderValor(){$('cv').value=brl(cents);$('gerar').disabled=cents<=0||emVenda}
+$('cv').addEventListener('input',function(e){   // estilo calculadora: os dígitos entram sempre pelo final
+  var it=e.inputType||'',d=(e.data||'').replace(/\D/g,'');
+  if(it==='insertText'&&d){for(var i=0;i<d.length;i++){cents=cents*10+Number(d[i]);if(cents>5000000)cents=Math.floor(cents/10)}}
+  else if(it.indexOf('delete')===0){cents=Math.floor(cents/10)}
+  else{cents=Math.min(parseInt(this.value.replace(/\D/g,'')||'0',10),5000000)}
+  renderValor();var x=this;setTimeout(function(){x.setSelectionRange(x.value.length,x.value.length)},0)});
+$('cv').addEventListener('focus',function(){var x=this;setTimeout(function(){x.setSelectionRange(x.value.length,x.value.length)},0)});
+$('cv').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('cd').focus()}});
+$('cd').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();gerar()}});
+['cn','ct','ce'].forEach(function(id,i){$(id).addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();if(i<2)$(['ct','ce'][i]).focus();else gerar()}})});
+document.addEventListener('keydown',function(e){if(e.key==='F2'&&!$('t-caixa').classList.contains('hide')&&!emVenda){e.preventDefault();$('cv').focus()}});
+$('gerar').onclick=gerar;
+function travar(on){['cv','cd','cn','ct','ce'].forEach(function(i){$(i).disabled=on});sh('hint',!on)}
+function novaVenda(){clearInterval(poll);cur=null;emVenda=false;intent=null;cents=0;cliId=null;travar(false);renderValor();
+  ['cn','ct','ce','cd'].forEach(function(i){$(i).value=''});$('cinfo').textContent='';$('gerr').textContent='';sh('st',false);sh('vazio',true);$('cv').focus()}
+function gerar(){
+  if(cents<=0||$('gerar').disabled)return;$('gerar').disabled=true;$('gerr').textContent='';
+  if(!intent)intent=uid();                       // clique duplo = mesma venda
+  api('POST','vendas',{intentId:intent,descricao:$('cd').value,valorCentavos:cents,cliente:{id:cliId,nome:$('cn').value,telefone:$('ct').value,endereco:$('ce').value}}).then(function(r){
+    if(r.code===200||r.code===201)mostra(r.j);
+    else if(r.code===409&&r.j.ativa){$('gerr').textContent=r.j.erro;mostra(r.j.ativa)}
+    else{$('gerr').textContent=r.j.erro||'Não foi possível gerar o Pix. Tente de novo.';renderValor()}
+  }).catch(function(){$('gerr').textContent='Sem conexão. Tente de novo.';renderValor()})}
+
+/* nome → sugestões (só com permissão de clientes) */
+var st;$('cn').addEventListener('input',function(){cliId=null;$('cinfo').textContent='';clearTimeout(st);var q=this.value.trim();if(!eu.perm.clientes||q.length<2){sh('sug',false);return}
+  st=setTimeout(function(){api('GET','clientes?q='+encodeURIComponent(q)).then(function(r){var s=$('sug');s.innerHTML='';if(r.code!==200||!r.j.length){sh('sug',false);return}
+    r.j.slice(0,6).forEach(function(c){var d=el('div',{text:(c.nome||'(sem nome)')+(c.telefone?' · '+c.telefone:'')});d.onclick=function(){cliId=c.id;$('cn').value=c.nome||'';$('ct').value=c.telefone||'';$('ce').value=c.endereco||'';$('cinfo').textContent='Cliente já cadastrada. Os dados serão reaproveitados.';sh('sug',false);$('cd').focus()};s.appendChild(d)});sh('sug',true)})},250)});
+document.addEventListener('click',function(e){if(e.target.id!=='cn')sh('sug',false)});
+
+/* ---------- caixa: cartão de status ---------- */
+var ICONE={clock:'<circle cx="26" cy="26" r="21" stroke="#e08a12"/><path d="M26 14v13l8 5" stroke="#e08a12"/>',check:'<circle cx="26" cy="26" r="21" stroke="#0d8a60"/><path d="M16 27l7 7 14-15" stroke="#0d8a60"/>',x:'<circle cx="26" cy="26" r="21" stroke="#5f6b65"/><path d="M18 18l16 16M34 18L18 34" stroke="#5f6b65"/>'};
+function mostra(v){
+  cur=v;emVenda=true;travar(true);sh('vazio',false);sh('st',true);
+  var ativa=v.status==='created'||v.status==='novo';
+  $('st').className='status st-'+v.status;
+  $('st-ic').innerHTML=v.status==='paid'?ICONE.check:(ativa?ICONE.clock:ICONE.x);
+  $('st-t').textContent=v.status==='paid'?'Pix recebido':(v.status==='created'?'Aguardando pagamento':(v.status==='novo'?'Gerando o Pix…':ROT[v.status]));
+  $('st-l1').textContent='Venda '+v.numero+(v.descricao?' · '+v.descricao:'');
+  $('st-v').textContent=brl(v.valorCentavos);
+  $('st-c').textContent=v.clienteNome||'';
+  $('st-l2').textContent=v.status==='paid'?'Confirmado às '+hora(v.pagoEm,true):(v.status==='created'?'Aproxime o celular do cartão NFC.':'');
+  var av=$('st-av');
+  if(v.status==='paid'&&v.pagoApos){av.className='aviso';av.textContent='Pago depois de a venda ter sido cancelada. Confira e, se for o caso, faça o estorno.'}
+  else if(v.status==='novo'){av.className='aviso';av.textContent='Sem conexão com o Mercado Pago no momento. A venda está salva e será enviada assim que a conexão voltar.'}
+  else av.className='aviso hide';
+  var q=v.status==='created'&&!!v.qrData;sh('st-qr',q);sh('st-qrd',q);
+  if(q){try{var z=qrcode(0,'M');z.addData(v.qrData);z.make();$('st-qr').innerHTML=z.createSvgTag({cellSize:4,margin:1,scalable:true})}catch(e){$('st-qr').textContent=''}}
+  sh('st-ac',ativa);sh('b-nova',!ativa);$('st-err').textContent='';
+  clearInterval(poll);if(ativa)poll=setInterval(function(){api('GET','vendas/'+v.id).then(function(r){if(r.code===200&&r.j.status!==cur.status){var pagou=r.j.status==='paid';mostra(r.j);if(pagou)beep()}})},2000)}
+$('b-ver').onclick=function(){$('st-err').textContent='';api('GET','vendas/'+cur.id+'?verificar=1').then(function(r){if(r.code===200){var pagou=r.j.status==='paid'&&cur.status!=='paid';mostra(r.j);if(pagou)beep();else if(r.j.status==='created')$('st-err').textContent='Ainda não recebemos o pagamento.'}else $('st-err').textContent='Não foi possível verificar agora.'})};
+$('b-can').onclick=function(){if(!confirm('Cancelar esta cobrança?'))return;api('POST','vendas/'+cur.id+'/cancelar').then(function(r){if(r.code===200){mostra(r.j);if(r.j.status==='paid')$('st-err').textContent='A cliente já tinha pago: a venda foi mantida como paga.'}else if(r.code===409){$('st-err').textContent=r.j.erro;if(r.j.venda)mostra(r.j.venda)}else $('st-err').textContent='Não foi possível cancelar.'})};
+$('b-nova').onclick=novaVenda;
+
+/* ---------- clientes: lista telefônica ---------- */
+var tq,selCli=null;
+function inicial(n){if(!n||!n.trim())return 'Sem nome';var c=n.trim()[0].normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();return /[A-Z]/.test(c)?c:'#'}
+function clientes(auto){
+  var q=$('qc').value.trim();
+  api('GET','clientes'+(q?'?q='+encodeURIComponent(q):'')).then(function(r){var L=$('lc');L.innerHTML='';if(r.code!==200)return;
+    var n=r.j.length;$('lcv').textContent=n?(n+(n===1?' cliente':' clientes')+(q?(n===1?' encontrada':' encontradas'):(n===1?' cadastrada':' cadastradas'))+' · ordem alfabética'):(q?'Nenhuma cliente encontrada.':'Nenhuma cliente cadastrada ainda. Elas aparecem aqui conforme as vendas registram os dados.');
+    var atual=null;
+    r.j.forEach(function(c){var ini=inicial(c.nome);if(ini!==atual){atual=ini;L.appendChild(el('div',{class:'letra',text:ini}))}
+      var row=el('div',{class:'linha'+(selCli===c.id?' on':'')},[el('b',{text:c.nome||'(sem nome)'}),el('span',{text:c.telefone||'sem telefone'}),el('span',{class:'e',text:c.endereco||'sem endereço'})]);
+      row.onclick=function(){selCli=c.id;document.querySelectorAll('.agenda .linha').forEach(function(x){x.classList.remove('on')});row.classList.add('on');ficha(c.id)};L.appendChild(row)});
+    if(auto&&n===1){selCli=r.j[0].id;L.querySelector('.linha').classList.add('on');ficha(r.j[0].id)}})}   // sobrou uma só: já abre a ficha
+$('qc').addEventListener('input',function(){clearTimeout(tq);tq=setTimeout(function(){clientes(true)},200)});
+function ficha(id){api('GET','clientes/'+id).then(function(r){var F=$('ficha');F.innerHTML='';if(r.code!==200)return;var c=r.j;
+  var dl=el('dl',{class:'ficha',style:'margin:0'});
+  dl.appendChild(el('dt',{text:'Nome'}));dl.appendChild(el('dd',{text:c.nome||'(sem nome)'}));
+  dl.appendChild(el('dt',{text:'WhatsApp'}));var dd=el('dd',{text:c.telefone||'—'});dl.appendChild(dd);
+  if(c.telefone){var l=el('div',{class:'linha'});
+    var b1=el('button',{class:'btn',text:'Copiar número'});b1.onclick=function(){var n=waNum(c.telefone);(navigator.clipboard?navigator.clipboard.writeText(n):Promise.reject()).then(function(){b1.textContent='Copiado ✔'},function(){b1.textContent='Não foi possível copiar'});setTimeout(function(){b1.textContent='Copiar número'},1800)};
+    var b2=el('a',{class:'btn',text:'Abrir no WhatsApp',href:'https://wa.me/'+waNum(c.telefone),target:'_blank',rel:'noopener noreferrer',style:'text-decoration:none;display:inline-block'});
+    l.appendChild(b1);l.appendChild(b2);dl.appendChild(l)}
+  dl.appendChild(el('dt',{text:'Endereço'}));dl.appendChild(el('dd',{text:c.endereco||'—'}));
+  dl.appendChild(el('dt',{text:'Compras pagas'}));dl.appendChild(el('dd',{text:c.compras?(c.compras+' · '+brl(c.total)+(c.ultima?' · última em '+hora(c.ultima):'')):'Nenhuma ainda'}));
+  F.appendChild(dl)})}
+
+/* ---------- histórico ---------- */
+function filtros(){var p=new URLSearchParams();if($('hd').value)p.set('de',$('hd').value);if($('ha').value)p.set('ate',$('ha').value);if($('hs').value)p.set('status',$('hs').value);
+  var q=$('hq').value.trim();if(/^\d+$/.test(q))p.set('numero',q);else if(q)p.set('q',q);return p.toString()}
+function hist(){api('GET','vendas?'+filtros()).then(function(r){var t=$('ht');t.innerHTML='';if(r.code!==200)return;var tot=0;
+  r.j.forEach(function(v){if(v.status==='paid')tot+=v.valorCentavos;var tr=el('tr');
+    tr.appendChild(el('td',{class:'n',text:v.numero}));tr.appendChild(el('td',{text:hora(v.criadoEm)}));
+    tr.appendChild(el('td',{text:(v.clienteNome?v.clienteNome+' · ':'')+(v.descricao||'')+(eu.papel==='admin'&&v.pedidoMp?' · MP '+v.pedidoMp:'')}));
+    tr.appendChild(el('td',{},[el('span',{class:'pill p-'+v.status,text:ROT[v.status]+(v.pagoApos?' (após cancelar)':'')})]));
+    tr.appendChild(el('td',{class:'n',text:brl(v.valorCentavos)}));
+    var a=el('td');if(eu.papel==='admin'&&v.status==='paid'){var b=el('button',{class:'btn danger',text:'Estornar'});b.onclick=function(){if(confirm('Estornar a venda '+v.numero+' ('+brl(v.valorCentavos)+')? O estorno é total e não pode ser desfeito.'))api('POST','vendas/'+v.id+'/estornar').then(function(x){if(x.code===200)hist();else alert(x.j.erro||'Não foi possível estornar.')})};a.appendChild(b)}
+    tr.appendChild(a);t.appendChild(tr)});
+  $('hv').textContent=r.j.length?r.j.length+' venda(s) · recebido nesta lista: '+brl(tot):'Nenhuma venda encontrada.'})}
+$('hb').onclick=hist;
+$('hx').onclick=function(){fetch(BASE+'exportar?'+filtros(),{headers:cab({})}).then(function(r){if(!r.ok)throw 0;var n=/filename="([^"]+)"/.exec(r.headers.get('content-disposition')||'');return r.blob().then(function(b){var a=el('a',{href:URL.createObjectURL(b),download:n?n[1]:'propix-vendas.csv'});document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},5000)})}).catch(function(){alert('Não foi possível exportar agora.')})};
+
+/* ---------- fechamento ---------- */
+function fech(){api('GET','fechamento?dia='+$('fd').value).then(function(r){var b=$('ftot');b.innerHTML='';if(r.code!==200)return;var f=r.j;
+  [['Recebido',f.recebido,'var(--g)'],['Pendências',f.pendentes],['Cancelamentos',f.cancelamentos],['Estornos',f.estornos]].forEach(function(x){
+    var v=el('b',{text:brl(x[1].centavos)});if(x[2])v.style.color=x[2];
+    b.appendChild(el('div',{class:'card'},[el('div',{class:'mut',text:x[0]}),v,el('div',{class:'mut',text:x[1].qtd+' venda'+(x[1].qtd===1?'':'s')})]))});
+  $('fnota').textContent=(f.tardios?f.tardios+' pagamento(s) chegaram depois do cancelamento e precisam de conferência. ':'')+'Para conferir uma diferença, use o número do pedido (no Histórico) no extrato do Mercado Pago.'})}
+$('fd').onchange=fech;
+
+/* ---------- usuários e permissões ---------- */
+function toggles(box,st,onchange){   // st: {permHistorico,permExportar,permClientes}; devolve funções de leitura
+  box.innerHTML='';var els={};
+  [['permHistorico','Visualizar histórico de vendas'],['permExportar','Exportar vendas'],['permClientes','Consultar clientes e WhatsApp']].forEach(function(d){
+    var i=el('input',{type:'checkbox'});i.checked=!!st[d[0]];els[d[0]]=i;
+    var row=el('label',{class:'tg',style:'margin:0;font-weight:400'},[el('span',{text:d[1]}),el('span',{class:'sw'},[i,el('i')])]);row.dataset.k=d[0];box.appendChild(row);
+    i.onchange=function(){sync();onchange&&onchange(read())}});
+  function sync(){var h=els.permHistorico.checked;if(!h)els.permExportar.checked=false;els.permExportar.disabled=!h;box.querySelector('[data-k=permExportar]').classList.toggle('off',!h)}
+  function read(){return{permHistorico:els.permHistorico.checked,permExportar:els.permExportar.checked,permClientes:els.permClientes.checked}}
+  sync();return read}
+var lerNovo=null;
+function usuarios(){
+  lerNovo=toggles($('perm-new'),{});
+  api('GET','usuarios').then(function(r){var L=$('u-list');L.innerHTML='';if(r.code!==200)return;
+    r.j.forEach(function(u){
+      var row=el('div',{class:'u-row'+(u.ativo?'':' inativo')});
+      var cab=el('div',{class:'cab'},[el('b',{text:u.nome}),el('span',{class:'mut',text:u.login}),el('span',{class:'pill '+(u.papel==='admin'?'p-paid':(u.ativo?'p-created':'p-canceled')),text:u.papel==='admin'?'Gestor':(u.ativo?'Caixa':'Desativado')})]);
+      if(u.papel!=='admin'){
+        var ac=el('div',{class:'acoes2'});
+        var bs=el('button',{class:'btn',text:'Redefinir senha'});bs.onclick=function(){var s=prompt('Nova senha para '+u.nome+' (mínimo 8 caracteres).\nEla precisará trocar no próximo acesso.');if(s)api('PATCH','usuarios/'+u.id,{senha:s}).then(function(x){if(x.code===200)alert('Senha redefinida.');else alert(x.j.erro||'Não foi possível.')})};
+        var ba=el('button',{class:'btn '+(u.ativo?'danger':''),text:u.ativo?'Desativar':'Reativar'});ba.onclick=function(){if(!u.ativo||confirm('Desativar o acesso de '+u.nome+'? Ela sai do sistema agora.'))api('PATCH','usuarios/'+u.id,{ativo:!u.ativo}).then(usuarios)};
+        ac.appendChild(bs);ac.appendChild(ba);cab.appendChild(ac)}
+      row.appendChild(cab);
+      if(u.papel!=='admin'){var box=el('div',{style:'margin-top:6px'});row.appendChild(box);toggles(box,u,function(p){api('PATCH','usuarios/'+u.id,p).then(function(x){if(x.code!==200){alert(x.j.erro||'Não foi possível.');usuarios()}})})}
+      else row.appendChild(el('div',{class:'mut',style:'margin-top:4px',text:'Acesso completo: caixa, clientes, histórico, exportação, fechamento e configurações.'}));
+      L.appendChild(row)})})}
+$('f-user').onsubmit=function(e){e.preventDefault();$('u-err').textContent='';
+  var p=lerNovo();p.nome=$('un').value;p.login=$('ul').value;p.senha=$('us').value;
+  api('POST','usuarios',p).then(function(r){if(r.code===201){$('un').value=$('ul').value=$('us').value='';usuarios()}else $('u-err').textContent=r.j.erro||'Não foi possível criar.'})};
+})();
+</script>
+</body>
+</html>

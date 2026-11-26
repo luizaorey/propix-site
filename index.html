@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://badhkhukxidtemzlgnlc.supabase.co">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Makro Boutique</title>
+<style>
+body{font-family:system-ui;padding:24px;max-width:420px;margin:auto;text-align:center}
+h1{font-size:20px}.v{font-size:40px;font-weight:700;margin:12px 0}
+button{font-size:18px;padding:14px 24px;border:0;border-radius:10px;background:#0a7;color:#fff;width:100%}
+.s{margin-top:16px;font-size:18px}textarea{width:100%;margin-top:12px;font-size:12px}
+#teste{background:#b00020;color:#fff;font-weight:700;padding:8px;margin:-24px -24px 16px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div id="teste" hidden>MODO TESTE — NÃO É PIX REAL. NÃO PAGUE.</div>
+<h1 id="loja">Makro Boutique</h1>
+<p id="d"></p>
+<div class="v" id="v"></div>
+<button id="b" hidden>Copiar Pix</button>
+<textarea id="t" readonly hidden rows="4"></textarea>
+<div class="s" id="st">Carregando…</div>
+<script src="/config.js"></script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var L={novo:'Aguarde um instante…',created:'Aguardando pagamento',paid:'Pix recebido. Obrigada!',canceled:'Cobrança cancelada',expired:'Cobrança expirada',refunded:'Pagamento estornado'};
+var token=new URLSearchParams(location.search).get('t'),q='',voltas=0;
+function get(p){return fetch(window.PROPIX_BASE+p,{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json()})}
+function depois(f,ms){if(++voltas<400)setTimeout(f,ms)}
+function ativa(){get('/api/ativa').then(function(j){
+  $('loja').textContent=j.loja;$('teste').hidden=!j.teste;
+  if(j.token){token=j.token;venda()}else{$('st').textContent='Aguarde a atendente gerar o Pix';depois(ativa,5000)}
+}).catch(function(){$('st').textContent='Sem conexão. Tentando de novo…';depois(ativa,5000)})}
+function venda(){get('/api/p/'+encodeURIComponent(token)).then(function(v){
+  $('loja').textContent=v.loja;$('teste').hidden=!v.teste;$('d').textContent=v.descricao||'';
+  $('v').textContent='R$ '+(v.valorCentavos/100).toFixed(2).replace('.',',');
+  $('st').textContent=L[v.status]||'';
+  q=v.qrData||'';$('b').hidden=!q;if(!q)$('t').hidden=true;
+  if(v.status==='created'||v.status==='novo')depois(venda,3000);
+}).catch(function(e){if(e===404){$('st').textContent='Compra não encontrada';return}$('st').textContent='Sem conexão. Tentando de novo…';depois(venda,5000)})}
+$('b').onclick=function(){var b=$('b');function ok(){b.textContent='Copiado! Abra o app do seu banco'}
+  function no(){var x=$('t');x.value=q;x.hidden=false;x.focus();x.select();b.textContent='Toque e segure para copiar'}
+  try{navigator.clipboard.writeText(q).then(ok,no)}catch(e){no()}};
+if(token)venda();else ativa();
+})();
+</script>
+</body>
+</html>
