@@ -412,7 +412,9 @@ function mostra(v){
 var recusados={};
 function visiveis(v){return (v.candidatos||[]).filter(function(c){return !recusados[v.id+c.id]})}
 function chavePix(v){return visiveis(v).map(function(c){return c.id}).join()+(v.semConsulta?'!':'')}
-function pintaPix(v){var B=$('st-pix');B.innerHTML='';if(!v.direto||v.status!=='created')return;var l=visiveis(v);
+function pintaPix(v){var B=$('st-pix');B.innerHTML='';
+  if(v.status==='paid'&&v.recebido){var R=v.recebido;if(R.banco||R.fim)B.appendChild(el('div',{class:'pixrec'},[R.banco?el('b',{text:R.banco}):'',el('div',{text:'Pago às '+hora(v.pagoEm,true)}),R.fim?el('div',{text:'ID da transação termina em '+R.fim}):'']));return}
+  if(!v.direto||v.status!=='created')return;var l=visiveis(v);
   if(v.semConsulta){B.appendChild(el('div',{class:'aviso',text:'Não foi possível consultar a conta agora. Tentando de novo.'}));return}
   if(v.auto){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, a tela muda sozinha.'}));return}
   if(!l.length){B.appendChild(el('p',{class:'mut',text:'Quando o Pix cair, ele aparece aqui para você confirmar.'}));return}
