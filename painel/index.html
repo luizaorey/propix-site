@@ -64,6 +64,7 @@ h1.t{font-size:32px;letter-spacing:-.02em;margin-bottom:18px}
 .status .l1{color:#3b4742;margin-top:4px}
 .status .big{font-size:48px;font-weight:800;letter-spacing:-.03em;margin:6px 0}
 .status .cli{font-size:20px;font-weight:600}
+.st-naocaiu{background:var(--vmb);border:3px solid var(--vm)}.st-naocaiu h2{color:var(--vm)}.st-naocaiu .aviso{background:#fff;border:1px solid var(--vm);font-size:16px;font-weight:600;text-align:center}
 .st-novo,.st-created{background:var(--amb);border-color:#f3d9a8}.st-novo h2,.st-created h2{color:#9a5a08}
 .st-paid{background:var(--gbg);border-color:#bfe5d0}.st-paid h2{color:var(--g)}
 .st-canceled,.st-expired,.st-refunded{background:var(--czb);border-color:#d5dadb}.st-canceled h2,.st-expired h2,.st-refunded h2{color:var(--cz)}
@@ -405,9 +406,19 @@ function mostra(v){
   var q=v.status==='created'&&!!v.qrData;sh('st-qr',q);sh('st-qrd',q);
   if(q){try{var z=qrcode(0,'M');z.addData(v.qrData);z.make();$('st-qr').innerHTML=z.createSvgTag({cellSize:4,margin:1,scalable:true})}catch(e){$('st-qr').textContent=''}}
   sh('st-ac',ativa);sh('b-nova',!ativa);$('st-err').textContent='';
+  pintaAlerta();
   clearInterval(poll);if(ativa)poll=setInterval(function(){api('GET','vendas/'+v.id).then(function(r){if(r.code!==200||!cur||r.j.id!==cur.id)return;
+    if(r.j.status===cur.status){cur.semConsulta=r.j.semConsulta;pintaPix(cur);pintaAlerta()}
     if(r.j.status!==cur.status){var pagou=r.j.status==='paid';mostra(r.j);if(pagou)beep()}
     else if(chavePix(r.j)!==chavePix(cur)){var novo=visiveis(r.j).length>visiveis(cur).length;cur=r.j;pintaPix(r.j);if(novo)beep()}})},v.direto?3000:2000)}
+/* Vermelho: o dinheiro NÃO entrou. Pix agendado não chega à conta antes da data, por isso o sistema não tem como saber se é agendado. */
+var conferido={},ESPERA=120000;
+var ALERTA='<circle cx="26" cy="26" r="21" stroke="#c0262d"/><path d="M26 15v15M26 37v.5" stroke="#c0262d"/>';
+function pintaAlerta(){var v=cur;if(!v||v.status!=='created'||!v.direto)return;
+  var red=!v.semConsulta&&(conferido[v.id]||Date.now()-new Date(v.criadoEm).getTime()>ESPERA),av=$('st-av');
+  $('st').className='status st-'+(red?'naocaiu':'created');$('st-ic').innerHTML=red?ALERTA:ICONE.clock;
+  $('st-t').textContent=red?'Pix NÃO recebido':'Aguardando pagamento';
+  if(red){av.className='aviso';av.textContent='O dinheiro ainda não entrou na conta. Pode estar AGENDADO ou não concluído. Só entregue a mercadoria quando o quadro ficar verde.'}else{av.className='aviso hide'}}
 /* Pix direto na chave: mostra o que entrou e a atendente confirma pelo comprovante (nunca marca sozinho) */
 var recusados={};
 function visiveis(v){return (v.candidatos||[]).filter(function(c){return !recusados[v.id+c.id]})}
@@ -422,7 +433,7 @@ function pintaPix(v){var B=$('st-pix');B.innerHTML='';
     sim.onclick=function(){sim.disabled=true;api('POST','vendas/'+v.id+'/confirmar',{pagamentoId:c.id}).then(function(r){if(r.code===200){mostra(r.j);beep()}else{sim.disabled=false;$('st-err').textContent=r.j.erro||'Não foi possível confirmar.'}})};
     nao.onclick=function(){recusados[v.id+c.id]=1;pintaPix(v)};
     B.appendChild(el('div',{class:'pixrec'},[el('div',{text:'Entrou um Pix de '+brl(v.valorCentavos)}),el('b',{text:'às '+hora(c.em,true)+' · '+c.banco}),c.fim?el('div',{text:'ID da transação termina em '+c.fim}):'',el('div',{class:'mut',text:'Confira o comprovante da cliente antes de confirmar.'}),sim,nao]))})}
-$('b-ver').onclick=function(){$('st-err').textContent='';api('GET','vendas/'+cur.id+'?verificar=1').then(function(r){if(r.code===200){var pagou=r.j.status==='paid'&&cur.status!=='paid';mostra(r.j);if(pagou)beep();else if(r.j.status==='created')$('st-err').textContent='Ainda não recebemos o pagamento.'}else $('st-err').textContent='Não foi possível verificar agora.'})};
+$('b-ver').onclick=function(){$('st-err').textContent='';api('GET','vendas/'+cur.id+'?verificar=1').then(function(r){if(r.code===200){var pagou=r.j.status==='paid'&&cur.status!=='paid';if(r.j.status==='created'&&!r.j.semConsulta)conferido[r.j.id]=1;mostra(r.j);if(pagou)beep();else if(r.j.status==='created')$('st-err').textContent='Ainda não recebemos o pagamento.'}else $('st-err').textContent='Não foi possível verificar agora.'})};
 $('b-can').onclick=function(){if(!confirm(cur.candidatos&&cur.candidatos.length?'ATENÇÃO: entrou um Pix deste valor. Cancelar mesmo assim?':'Cancelar esta cobrança?'))return;api('POST','vendas/'+cur.id+'/cancelar').then(function(r){if(r.code===200){mostra(r.j);if(r.j.status==='paid')$('st-err').textContent='A cliente já tinha pago: a venda foi mantida como paga.'}else if(r.code===409){$('st-err').textContent=r.j.erro;if(r.j.venda)mostra(r.j.venda)}else $('st-err').textContent='Não foi possível cancelar.'})};
 $('b-nova').onclick=novaVenda;
 
