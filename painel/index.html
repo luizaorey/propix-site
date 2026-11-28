@@ -135,6 +135,34 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
 .box{width:100%;max-width:440px}
 .box .logo{justify-content:center;margin-bottom:22px;color:var(--ink)}
 .box .logo span{color:var(--ink)}
+
+/* tela baixa de computador (monitor da loja, 1366×768): o Caixa inteiro cabe sem rolar */
+@media(min-width:861px) and (max-height:860px){
+  .top{height:42px}.logo b{font-size:21px}.logo span{font-size:12px}
+  .tabs button{padding:7px 16px;font-size:15px}
+  main{padding:10px 24px}
+  #t-caixa h1.t{display:none}
+  #t-caixa .card{padding:12px 16px}
+  #t-caixa label{margin:6px 0 2px;font-size:12px}
+  #t-caixa input{padding:6px 12px}
+  #t-caixa .valor{font-size:30px;padding:2px 12px;height:50px}
+  #t-caixa #cd{padding:6px 12px!important;font-size:18px!important;height:50px}
+  #t-caixa .sub{padding:8px 14px 10px;margin-top:10px}.sub h3{font-size:15px}.sub h3 small{font-size:13px}
+  .dupla{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+  #cinfo{font-size:12px;margin-top:4px!important}#cinfo:empty{margin:0!important}
+  #gerar{font-size:20px;padding:10px;margin-top:10px}
+  #t-caixa .erro{min-height:0;margin-top:4px;font-size:14px}#t-caixa .erro:empty{margin:0}
+  #t-caixa .hint{margin-top:6px;font-size:12px}
+  .sug{max-height:230px}
+  .vazio{padding:16px}
+  .status{padding:8px 16px;line-height:1.3}.status .ic{width:28px;height:28px;margin-bottom:0}.status h2{font-size:20px}
+  .status .l1{margin-top:0;font-size:14px}.status .big{font-size:30px;line-height:1.15}.status .cli{font-size:16px}
+  .status .aviso{margin-top:4px;padding:6px 10px;font-size:13px}.st-naocaiu .aviso{font-size:14px}
+  .status .pixrec{margin-top:6px;padding:8px 12px}
+  .qr{width:136px;height:136px;margin:4px auto 2px;padding:6px}
+  .status .mut{font-size:12px}.acoes{margin-top:6px}#t-caixa .btn{padding:6px 14px}
+  #b-nova{padding:9px;margin-top:8px}
+}
 </style>
 </head>
 <body>
@@ -201,8 +229,10 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
               <label for="cn">Nome</label><input id="cn" autocomplete="off">
               <div id="sug" class="sug hide"></div>
             </div>
-            <label for="ct">Telefone / WhatsApp</label><input id="ct" inputmode="tel" autocomplete="off" placeholder="(71) 9XXXX-XXXX">
-            <label for="ce">Endereço</label><input id="ce" autocomplete="off">
+            <div class="dupla">
+              <div><label for="ct">Telefone / WhatsApp</label><input id="ct" inputmode="tel" autocomplete="off" placeholder="(71) 9XXXX-XXXX"></div>
+              <div><label for="ce">Endereço</label><input id="ce" autocomplete="off"></div>
+            </div>
             <div class="mut" id="cinfo" style="margin-top:8px"></div>
           </div>
           <button class="primary" id="gerar" disabled>Gerar Pix</button>
