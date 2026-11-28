@@ -236,6 +236,7 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
 </div></div>
 
 <!-- aplicativo -->
+<!-- autocomplete="px-x…" (valor desconhecido de propósito): o Chrome não abre a lista de endereços salvos do computador; "off" ele ignora -->
 <div id="app" class="hide">
   <div class="top">
     <div class="logo"><b>ProPix</b><i>|</i><span>MAKRO BOUTIQUE</span></div>
@@ -249,18 +250,18 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
       <div class="caixa">
         <div class="card">
           <div class="row2">
-            <div><label for="cv" style="margin-top:0">Valor da venda</label><input id="cv" class="valor" inputmode="numeric" autocomplete="off" value="R$ 0,00"></div>
-            <div><label for="cd" style="margin-top:0">Descrição</label><input id="cd" autocomplete="off" placeholder="Ex.: Bermuda" style="padding:16px 14px;font-size:20px"></div>
+            <div><label for="cv" style="margin-top:0">Valor da venda</label><input id="cv" autocomplete="px-x1" class="valor" inputmode="numeric" value="R$ 0,00"></div>
+            <div><label for="cd" style="margin-top:0">Descrição</label><input id="cd" autocomplete="px-x2" placeholder="Ex.: Bermuda" style="padding:16px 14px;font-size:20px"></div>
           </div>
           <div class="sub">
             <h3>Dados da cliente <small>· opcional</small></h3>
             <div class="rel">
-              <label for="cn">Nome</label><input id="cn" autocomplete="off">
+              <label for="cn">Nome</label><input id="cn" autocomplete="px-x3">
               <div id="sug" class="sug hide"></div>
             </div>
             <div class="dupla">
-              <div><label for="ct">Telefone / WhatsApp</label><input id="ct" inputmode="tel" autocomplete="off" placeholder="(71) 9XXXX-XXXX"></div>
-              <div><label for="ce">Endereço</label><input id="ce" autocomplete="off"></div>
+              <div><label for="ct">Telefone / WhatsApp</label><input id="ct" autocomplete="px-x4" inputmode="tel" placeholder="(71) 9XXXX-XXXX"></div>
+              <div><label for="ce">Endereço</label><input id="ce" autocomplete="px-x5"></div>
             </div>
             <div class="mut" id="cinfo" style="margin-top:8px"></div>
           </div>
@@ -295,7 +296,7 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
       <div class="split cli">
         <div class="card">
           <label for="qc" style="margin-top:0">Buscar por nome ou telefone</label>
-          <input id="qc" autocomplete="off" placeholder="Digite o nome ou o telefone">
+          <input id="qc" autocomplete="px-x6" placeholder="Digite o nome ou o telefone">
           <div class="mut" id="lcv" style="margin:10px 0 4px"></div>
           <div class="agenda" id="lc"></div>
         </div>
@@ -311,7 +312,7 @@ td{padding:12px 8px;border-bottom:1px solid #edf1ee;font-size:15px;vertical-alig
           <div><label for="hd" style="margin-top:0">De</label><input id="hd" type="date"></div>
           <div><label for="ha" style="margin-top:0">Até</label><input id="ha" type="date"></div>
           <div><label for="hs" style="margin-top:0">Situação</label><select id="hs"><option value="">Todas</option><option value="paid">Paga</option><option value="created">Aguardando</option><option value="canceled">Cancelada</option><option value="expired">Expirada</option><option value="refunded">Estornada</option></select></div>
-          <div><label for="hq" style="margin-top:0">Nº, cliente ou produto</label><input id="hq"></div>
+          <div><label for="hq" style="margin-top:0">Nº, cliente ou produto</label><input id="hq" autocomplete="px-x7"></div>
         </div>
         <div class="acoes" style="justify-content:flex-start"><button class="btn" id="hb">Buscar</button><button class="btn hide" id="hx">Exportar (CSV)</button></div>
       </div>
